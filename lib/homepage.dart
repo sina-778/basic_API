@@ -1,6 +1,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -14,19 +15,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future getUserData() async {
+
+  late int length;
+
+  Future? getUserData() async {
 
     var response= await http.get(Uri.https('jsonplaceholder.typicode.com', 'users'));
     var jsonData = jsonDecode(response.body);
     List<User> users= [];
     for(var u in jsonData){
-      User user= User(userName: u['name'], mail: u['mail'],name: u['name']);
+      User user= User(username: u['username'], email: u['email'],name: u['name']);
       users.add(user);
+      inspect(user);
+      print(user);
     }
-    print(users.length);
-    //print('Monim');
+    length = users.length;
+    print(length);
+    print(users.toList());
     return users;
+
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,29 +49,34 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        body: Container(
-          child: Card(child: FutureBuilder(
-            future: getUserData(),
-            builder: (context, snapshot){
-              if(snapshot.data == null){
-                return Container(child: Center(
-                  child: Text("Loading......"),
-                ),);
-              }else return ListView.builder(itemCount:   snapshot.data.length , itemBuilder: (context , i){
-                return ListTile(
-                  title: Text(snapshot.data[i].name),
-                );
-              });
-            },
-          ),),
-        ),
-        // body: Center(child: ElevatedButton(
-        //   child: Text('Click Me'),
-        //   onPressed:(){
-        //     // print('Sina');
-        //     getUserData();
-        //   },
-        // ),),
+        // body: Container(
+        //   child: Card(child: FutureBuilder(
+        //     future: getUserData(),
+        //     builder: (context, snapshot){
+        //       if(snapshot.data == null){
+        //         return Container(child: Center(
+        //           child: Text("Loading......"),
+        //         ),);
+        //       }else if(!snapshot.hasData){
+        //         return Center(child: CircularProgressIndicator());
+        //       }
+        //       else return ListView.builder(
+        //             itemCount: 15, //snapshot.data.length ,
+        //             itemBuilder: (context , i){
+        //         return ListTile(
+        //           title: Text("List Item $i"),
+        //         );
+        //       });
+        //     },
+        //   ),),
+        // ),
+        body: Center(child: ElevatedButton(
+          child: Text('Click Me'),
+          onPressed:(){
+            // print('Sina');
+            getUserData();
+          },
+        ),),
       ),
     );
   }

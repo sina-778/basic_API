@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 class User{
-  final String? name, mail, userName;
-  User({required this.name, required this.mail, required this.userName});
+  final String? name, email, username;
+  User({required this.name, required this.email, required this.username});
 
-
-
+  @override
+  String toString() {
+    return 'User: {name: ${name}, mail: ${email}, username: ${username}}';
+  }
 }
 
 
